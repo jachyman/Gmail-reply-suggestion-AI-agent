@@ -38,25 +38,11 @@ pip install -r requirements.txt
 # 4) Place your Google OAuth client file
 # Save your OAuth client JSON as credentials.json in the project root
 
-# 5) First run will open a browser to authorize Gmail access
-# You can import and call the tool function for a quick check:
-python - << 'PY'
-from gmail_reply_suggestion import getEmailsBySubject
-print(getEmailsBySubject("ceskaposta", 3))
-PY
 ```
-
-If you use the LangGraph agent, import `graph` from `gmail_reply_suggestion.py` and invoke it per your application flow.
 
 ---
 
 ## Environment Variables
-These are read via `python-dotenv` from `.env` if present:
-
-- `GOOGLE_API_KEY` (required): Your Gemini API key.
-- `GOOGLE_CLIENT_SECRET` (optional): Path to OAuth client JSON (default: `credentials.json`).
-- `GMAIL_TOKEN_PATH` (optional): Path to the saved OAuth token (default: `token.pickle`).
-
 Example `.env`:
 
 ```dotenv
@@ -82,11 +68,6 @@ You can integrate `graph` into your app or test it interactively:
 from gmail_reply_suggestion import graph
 
 # Example of sending a user message that triggers the tool call under the hood
-result = graph.invoke({"messages": [{"role": "user", "content": "ceskaposta"}]})
+user_message = input("Enter your message: ")
+result = graph.invoke({"messages": [{"role": "user", "content": user_message}]})
 print(result)
-```
-
-## Google OAuth notes
-- First run will open a browser for consent; a token is stored at `token.pickle`.
-- To reset auth, delete `token.pickle` and run again.
-- If you leaked `credentials.json` and/or `token.pickle`, delete that OAuth client in Google Cloud Console, create a new one, and re-consent.
